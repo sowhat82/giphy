@@ -1,5 +1,15 @@
+<h3>your search of {{searchterm}}</h3>
+
+<div>
+{{#if hascontent}}
+    {{#each searchedgifs}}
+        <h5>{{this.title}}</h5>
+        <img src="{{this.url}}" alt="">
+    {{/each}}
+{{else}}
+
+<h3>no results</h3>
+{{/if}}
 
 
-{{#each searchedgifs}}
-    <img src="{{this}}" alt="">
-{{/each}}
+</div>

@@ -9,7 +9,6 @@ const PORT = parseInt(process.argv[2]) || parseInt(process.env.APP_PORT) || 3000
 const apikey = process.env.apikey || ""
 const giphyurl = 'https://api.giphy.com/v1/gifs/search'
 
-var searchedgifs = []
 
 
 
@@ -49,7 +48,7 @@ app.get('/',
 app.get('/search',
 async (req,resp) => {
     //status 200
-    const searchterm = req.query['search-term'] //to pull data from the search field in html form
+    const searchterm = req.query['search-term'] //to pull data from the search field in index.html form
     console.info(searchterm)
 
 //construct the url with the query parameters
@@ -67,20 +66,34 @@ async (req,resp) => {
     const result = await fetch(url) //fetch returns a promise, to be opened using await. within it is an object with a json function.
     const giphys =  await result.json() //result.json returns yet another promise, containing the final json object to be examined.
 //    console.info(giphys)
-    
+
+    var searchedgifs = []
     var arrayLength = giphys.data.length;
     
     for (var i = 0; i < arrayLength; i++) {
-        //console.log(myStringArray[i]);
-        searchedgifs[i] = giphys.data[i].images.fixed_height.url
+        const url = giphys.data[i].images.fixed_height.url
+        const title = giphys.data[i].title
+        searchedgifs.push({title,url})
     }
+// the below works the same as the above, to move certain elements from an array to a new array
+    const imgs = giphys.data
+//        .filter(
+  //          d => {
+    //            return !d.title.includes('f**k')
+      //      }
+   //     )
+        .map(               //length of new array will be the same
+            (d)=> {
+                return {title: d.title, url: d.images.fixed_height.url}          
+            }
+        )
 
 //    console.info(giphys.data[0].images.fixed_height.url)
-//console.info(searchedgifs)
-
+console.info(searchedgifs)
+var hascontent
     resp.status(200)
     resp.type('text/html')
-    resp.render('searchresult', {searchedgifs})
+    resp.render('searchresult', {searchedgifs: imgs, searchterm, hascontent: !!imgs.length})
 })
 
 
