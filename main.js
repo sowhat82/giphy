@@ -3,10 +3,12 @@ const express = require('express')
 const handlebars = require('express-handlebars')
 const fetch = require('node-fetch')
 const withquery = require('with-query').default
+const secureEnv = require('secure-env')
+global.env = secureEnv({secret:'mySecretPassword'})
 
 //configure the PORT
 const PORT = parseInt(process.argv[2]) || parseInt(process.env.PORT) || 3000
-const apikey = process.env.apikey || ""
+const apikey = global.env.API_KEY || process.env.apikey || ""
 const giphyurl = 'https://api.giphy.com/v1/gifs/search'
 
 
@@ -99,7 +101,7 @@ var hascontent
 
 
 /*https://api.giphy.com/v1/gifs/search
-?api_key=9eNVZa9XniHwaX6foVq3Dbz2daw9XhQs
+?api_key=??
 &q=noodles
 &limit=25
 &offset=0
