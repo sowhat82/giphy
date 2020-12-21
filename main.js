@@ -14,8 +14,6 @@ const giphyurl = 'https://api.giphy.com/v1/gifs/search'
 
 
 
-//var apikey = '???'
-
 // create an instance of express
 const app = express()
 
